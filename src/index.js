@@ -1,5 +1,5 @@
 import styles from './style.css';
-import { menuButtonFunction } from './menu.js';
+import { menuButtonDOMHandler } from './menu.js';
 class TodoInfoHolder{
     constructor(title,description,dueDate,priority){
         this.title = title
@@ -8,16 +8,20 @@ class TodoInfoHolder{
         this.priority = priority
     }
 }
+const menubutton = document.querySelector('#menubutton');
+const menuDropDown = document.querySelector('#menuDropDown');
+const test = new menuButtonDOMHandler(menuDropDown);
 
+menubutton.addEventListener('click', () => {
+  test.menuDropDownFunction();
+});
 
+menubutton.addEventListener('mousedown', () =>{
+  menubutton.style.transform = 'scale(.9)'
+})
 
+menubutton.addEventListener('mouseup', () =>{
+  menubutton.style.transform = 'scale(1)'
+})
 
-const menubutton = document.querySelector('#menubutton')
-menubutton.addEventListener('click',menuButtonFunction)
-
-
-
-
-
-
-console.log('index.js working')
+console.log('index.js working');

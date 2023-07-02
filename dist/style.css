@@ -1,12 +1,18 @@
 *{
+    
     margin: 0;
     padding: 0;
+    font-family:Georgia, 'Times New Roman', Times, serif ;
+}
+html,body{
+    height: 100%;
 }
 .header{
     display: flex;
     flex-direction: row;
-    background-color: rgb(46, 110, 46);
+    background-color: rgb(31, 46, 35);
     justify-content: space-between;
+    align-items: center;
     padding: 10px;
     border-bottom: 4px solid rgb(113, 183, 113);
 }
@@ -28,18 +34,75 @@
     opacity: 1;
 }
 
+
+
 #tasks{
-    padding: 20px;
+    padding: 25px;
     flex: 1;
+    background-color: rgb(31, 46, 35);
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 #content{
     display: flex;
     flex-direction: row;
+}
+#menuDropDown{
+    width: 350px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(30, 40, 31);
+    color: white;
+    user-select: none;
+    height: 85.1vh; /*no idea of how this works*/
+}
+
+#menuDropDown h2{
+    border-bottom: 2px solid rgb(255, 255, 255);
+    margin-bottom: 25px;
+}
+
+#menuDropDown div{
+    margin-bottom: 5px;
+}
+
+
+#Home{
+    margin-bottom: 20px;
+}
+
+#Home div{
+    height: 50px;
+    background-color: rgb(33, 33, 33);
+    display: flex;
+    align-items: center;
+}
+
+#footer{
+    margin-top: auto;
+    background-color: rgb(26, 32, 29);
+    color: white;
     
 }
 
-#menuDropDown{
-    width: 330px;
-    padding: 20px;
+#menubutton{
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#menubutton:hover{
+    background-color: gray;
+}
+
+#menubuttonimage{
+    width: 32px;
+    height: 32px;
+    background-image: url('../imgs/menu.svg');
+    background-size : cover
 }

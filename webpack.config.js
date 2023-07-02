@@ -26,7 +26,21 @@ module.exports = {
       type: 'asset/resource',
 
     },
+    {
+      test: /\.(png|jpe?g|gif)$/i,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'images/',
+            publicPath: 'images/',
+          },
+        },
+      ],
+    },
    ],
 
  },
 };
+
