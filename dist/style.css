@@ -42,11 +42,12 @@ html,body{
     background-color: rgb(31, 46, 35);
     padding-left: 40px;
     padding-right: 40px;
+
 }
 
 #content{
     display: flex;
-    flex-direction: row;
+    flex-direction: row;  
 }
 #menuDropDown{
     width: 350px;
@@ -56,12 +57,12 @@ html,body{
     background-color: rgb(30, 40, 31);
     color: white;
     user-select: none;
-    height: 85.1vh; /*no idea of how this works*/
+    
 }
 
 #menuDropDown h2{
     border-bottom: 2px solid rgb(255, 255, 255);
-    margin-bottom: 25px;
+    margin-bottom: 5px;
 }
 
 #menuDropDown div{
@@ -84,7 +85,7 @@ html,body{
     margin-top: auto;
     background-color: rgb(26, 32, 29);
     color: white;
-    
+
 }
 
 #menubutton{
@@ -105,4 +106,30 @@ html,body{
     height: 32px;
     background-image: url('../imgs/menu.svg');
     background-size : cover
+}
+
+#AddProjectsButton{
+    height: 40px;
+    background-color: rgb(30, 40, 31);
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#AddProjectsButton:hover{
+    background-color: rgb(44, 52, 49);
+}
+
+#ProjectsHolder{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#project-plus{
+    height: 24px;
+    width: 24px;
+    margin-right: 30px;
 }

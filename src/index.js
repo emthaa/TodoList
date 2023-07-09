@@ -1,5 +1,5 @@
 import styles from './style.css';
-import { menuButtonDOMHandler } from './menu.js';
+import { menuButtonDOMHandler, projectLogicHandler } from './menu.js';
 class TodoInfoHolder{
     constructor(title,description,dueDate,priority){
         this.title = title
@@ -10,10 +10,15 @@ class TodoInfoHolder{
 }
 const menubutton = document.querySelector('#menubutton');
 const menuDropDown = document.querySelector('#menuDropDown');
-const test = new menuButtonDOMHandler(menuDropDown);
+const menuBtnDOMHandler = new menuButtonDOMHandler(menuDropDown);
+
+const addProjectButton = document.querySelector('#AddProjectsButton')
+
+const prjctLogicHandler = new projectLogicHandler()
 
 menubutton.addEventListener('click', () => {
-  test.menuDropDownFunction();
+  menuBtnDOMHandler.menuDropDownFunction();
+  
 });
 
 menubutton.addEventListener('mousedown', () =>{
@@ -24,4 +29,8 @@ menubutton.addEventListener('mouseup', () =>{
   menubutton.style.transform = 'scale(1)'
 })
 
+addProjectButton.addEventListener('click', () => {
+  prjctLogicHandler.addNewProjectButton()
+});
+prjctLogicHandler.addNewProjectButton()//make sure to get rid off this
 console.log('index.js working');
