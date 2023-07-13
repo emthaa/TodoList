@@ -67,3 +67,60 @@
     background-size : cover;
     
 }
+
+.projectHolder{
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.projectImg{
+    height: 24px;
+    width: 24px;
+    background-image: url('../imgs/menu.svg');
+    background-size : cover;
+    margin-right: 5px;
+}
+
+.projectText{
+    font-size: 20px;
+    margin-bottom: 5px;
+    width: 260px;
+}
+
+.projectHolder:hover{
+    background-color: rgb(44, 52, 49);
+}
+
+.projectEditButtonsContainer {
+    height: 90px;
+    width: 90px;
+    background-color: aliceblue;
+    border: 1px dotted black;
+    opacity: 0;
+    bottom: 110px;
+    right: 50px;
+    position: absolute; 
+    z-index: 2; 
+    padding: 5px;
+    background-color: #1f2e23;
+  }
+  
+
+
+.deleteButton:hover,.renameButton:hover{
+    background-color: #1e281f;
+}
+
+.renameButton,.deleteButton{
+    height: 45px;
+    width: 100%;
+    border: none;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    background-color: #1f2e23;
+    cursor: pointer;
+}

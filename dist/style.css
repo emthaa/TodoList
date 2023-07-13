@@ -38,10 +38,11 @@ html,body{
 
 #tasks{
     padding: 25px;
-    flex: 1;
     background-color: rgb(31, 46, 35);
     padding-left: 40px;
     padding-right: 40px;
+    flex: 1;
+    min-height: 84vh;
 
 }
 
@@ -62,7 +63,7 @@ html,body{
 
 #menuDropDown h2{
     border-bottom: 2px solid rgb(255, 255, 255);
-    margin-bottom: 5px;
+    margin-bottom: 20px;
 }
 
 #menuDropDown div{
@@ -76,9 +77,14 @@ html,body{
 
 #Home div{
     height: 50px;
-    background-color: rgb(33, 33, 33);
+    background-color: #1e281f;
     display: flex;
     align-items: center;
+    
+}
+
+#Home div:hover{
+    background-color: rgb(44, 52, 49);
 }
 
 #footer{
@@ -98,7 +104,7 @@ html,body{
 }
 
 #menubutton:hover{
-    background-color: gray;
+    background-color: rgb(60, 81, 59);
 }
 
 #menubuttonimage{
@@ -116,6 +122,7 @@ html,body{
     padding: 15px;
     font-size: 20px;
     cursor: pointer;
+    z-index: 1;
 }
 
 #AddProjectsButton:hover{
@@ -133,3 +140,13 @@ html,body{
     width: 24px;
     margin-right: 30px;
 }
+
+.projectEditButton{
+    height: 24px;
+    width: 24px;
+    background-image: url('../imgs/edit.png');
+    background-size : cover;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
