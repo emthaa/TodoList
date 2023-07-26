@@ -1,4 +1,5 @@
 
+import { localStorageHandler } from "./localStorage";
 
 
 export class menuButtonDOMHandler{
@@ -10,6 +11,7 @@ export class menuButtonDOMHandler{
             this.menuDropDown.style.opacity = '0'
             this.menuDropDown.style.position = 'absolute'
             this.menuDropDown.style.pointerEvents = "none";
+            
         }else{
             this.menuDropDown.style.opacity = '1'
             this.menuDropDown.style.position = 'static'
@@ -30,9 +32,13 @@ export class projectLogicHandler {
     const a = new projectsDOMHandler(container);
     const projectCreatorHolder = document.querySelector('#projectCreatorHolder');
     const puttingProjectHere = document.querySelector('#Projects');
+    const h = new localStorageHandler()
 
     a.createNewProject(projectNameInputValue, puttingProjectHere);
+    h.createProjectAndAddToProjectList(projectNameInputValue)
     a.moveAddProjectButtonDown();
+    this.addLogicToProject()
+    this.fixEditButtonBug()
     projectCreatorHolder.remove();
   }
 
@@ -88,6 +94,7 @@ addNewProjectButton() {
     this.addLogicToCancelButton();
     this.addLogicToEditButtons(); 
     this.addLogicToEditDeleteButton(); 
+    
   }
 }
 
@@ -142,16 +149,50 @@ addLogicToEditButtons() {
   });
 }
 
-addLogicToEditDeleteButton(){
-    const allEditDeleteButtons = document.querySelectorAll('.deleteButton');
-    allEditDeleteButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-       button.parentNode.parentNode.parentNode.remove()
-      });
+fixEditButtonBug(){
+  console.log('jett')
+  const projectEditButtonsContainer = document.querySelectorAll('.projectEditButtonsContainer');
+  for(let i = 0; i<projectEditButtonsContainer.length;i++){
+    projectEditButtonsContainer[i].style.opacity = '1'
+    projectEditButtonsContainer[i].style.position = 'relative'
+    projectEditButtonsContainer[i].style.pointerEvents = "auto";
+    projectEditButtonsContainer[i].style.opacity = '0'
+    projectEditButtonsContainer[i].style.position = 'absolute'
+    projectEditButtonsContainer[i].style.pointerEvents = "none";
+  }
+  
+
+}
+
+addLogicToEditDeleteButton() {
+  const allEditDeleteButtons = document.querySelectorAll('.deleteButton');
+  for (let i = 0; i < allEditDeleteButtons.length; i++) {
+    const button = allEditDeleteButtons[i];
+    button.addEventListener('click', () => {
+      console.log('her')
+      const h = new localStorageHandler()  //giving deleteproject wrong index
+      h.deleteProject(button)
+      button.parentNode.parentNode.parentNode.remove();
+      this.addLogicToProject()
     });
   }
 }
 
+addLogicToProject(){ //update projectlist
+  const taskHeader = document.querySelector('#task-header');
+  const projectList = document.querySelectorAll('.projectHolder')
+  const projectListText = document.querySelectorAll('.projectText')
+  for(let i = 0; i < projectList.length;i++){
+    projectList[i].addEventListener('click', () =>{
+      console.log('gwe')
+      taskHeader.innerHTML = projectListText[i].textContent
+    })
+}
+  
+
+}
+
+}
 export class projectsDOMHandler {
   constructor(whereToPutProject) {
     this.whereToPutProject = whereToPutProject;
@@ -185,12 +226,13 @@ export class projectsDOMHandler {
     projectCreatorHolderAddButton.type = 'submit';
     projectCreatorHolderButtons.appendChild(projectCreatorHolderAddButton);
     projectCreatorHolderAddButton.value = 'Add';
-    projectCreatorHolderAddButton.id = 'projectCreatorHolderAddButton';
+    projectCreatorHolderAddButton.className = 'addButton';
 
     const projectCreatorHolderCancelButton = document.createElement('div');
     projectCreatorHolderButtons.appendChild(projectCreatorHolderCancelButton);
-    projectCreatorHolderCancelButton.id = 'projectCreatorHolderCancelButton';
+    projectCreatorHolderCancelButton.className = 'cancelButton';
     projectCreatorHolderCancelButton.innerHTML = 'Cancel';
+    projectCreatorHolderCancelButton.id = 'projectCreatorHolderCancelButton'
   
 
 
@@ -232,11 +274,7 @@ export class projectsDOMHandler {
 
   }
 
-  /*
-  localStorage.c = [word];
-    const h = localStorage.getItem('colorSetting')
-    console.log(h)
-  */
+
   moveAddProjectButtonDown() {
     const container = document.querySelector('#ProjectsHolder');
     const addProjectButton = document.querySelector('#AddProjectsButton');
@@ -245,16 +283,19 @@ export class projectsDOMHandler {
 
   projectEditButtonFunction(btn) {
     const projectEditButtonsContainer = btn.querySelector('.projectEditButtonsContainer');
+
     if (projectEditButtonsContainer.style.opacity == 1 || projectEditButtonsContainer.style.opacity == ' '){
       projectEditButtonsContainer.style.opacity = '0'
       projectEditButtonsContainer.style.position = 'absolute'
       projectEditButtonsContainer.style.pointerEvents = "none";
+
+
       
   }else{
       projectEditButtonsContainer.style.opacity = '1'
       projectEditButtonsContainer.style.position = 'relative'
       projectEditButtonsContainer.style.pointerEvents = "auto";
-  }
+    }
   }
 }
 

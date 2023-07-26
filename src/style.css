@@ -27,7 +27,7 @@
     padding-left: 5px;
 }
 
-#projectCreatorHolderAddButton{
+.addButton{
     color: white;
     background-color: rgb(60, 160, 102);
     border: none;
@@ -38,7 +38,7 @@
     font-weight: bold;
 }
 
-#projectCreatorHolderCancelButton{
+.cancelButton{
     color: white;
     background-color: rgb(160, 60, 68);
     border: none;
@@ -95,6 +95,7 @@
 }
 
 .projectEditButtonsContainer {
+    position: absolute;
     height: 90px;
     width: 90px;
     background-color: aliceblue;
@@ -102,10 +103,10 @@
     opacity: 0;
     bottom: 110px;
     right: 50px;
-    position: absolute; 
-    z-index: 2; 
+    z-index: 2;
     padding: 5px;
     background-color: #1f2e23;
+  
   }
   
 
@@ -123,4 +124,69 @@
     font-weight: bold;
     background-color: #1f2e23;
     cursor: pointer;
+}
+
+
+#addTaskContainer{
+    display: flex;
+    align-items: center;
+    color: white;
+    border-radius: 5px;
+    height: 50px;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+#addTaskContainer:hover{
+    background-color: #1e281f;
+}
+
+#newTaskPlus{
+    height: 25px;
+    width: 25px;
+    background-image: url('../imgs/dark-mode-plus.svg');
+    background-size : cover;
+    margin-left: 25px;
+}
+
+#newTaskText{
+    font-size: 20px;
+    font-weight: 500;
+    margin-left: 25px;
+    margin-top: 2px;
+}
+
+
+#formContainer{
+    background-color: #1e281f;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+#formTitle,#detailsTitle,#dateTitle{
+    color: white;
+    font-size: 18px;
+    
+}
+
+#formTitleInput,#detailsInput,#dateInput{
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+#detailsInput{
+    height: 65px;
+    resize: none;
+}
+
+#newTaskButtonHolder{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
 }

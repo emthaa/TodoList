@@ -1,5 +1,16 @@
+/**
+ Todo:
+ move projects up and down
+
+ */
+
+
+
 import styles from './style.css';
 import { menuButtonDOMHandler, projectLogicHandler, projectsDOMHandler } from './menu.js';
+import { localStorageHandler } from './localStorage';
+import { taskLogicHandler } from './task';
+
 class TodoInfoHolder{
     constructor(title,description,dueDate,priority){
         this.title = title
@@ -18,6 +29,7 @@ const prjctLogicHandler = new projectLogicHandler()
 
 const prjctDOMHandler = new projectsDOMHandler(document.querySelector('#ProjectsHolder'))
 
+const tskLogicHandler = new taskLogicHandler()
 
 menubutton.addEventListener('click', () => {
   menuBtnDOMHandler.menuDropDownFunction();
@@ -43,11 +55,17 @@ document.addEventListener('click', function(event) {
 
 });
 
-prjctDOMHandler.createNewProject('test 1',document.querySelector('#Projects'))
-prjctDOMHandler.createNewProject('test 2',document.querySelector('#Projects'))
-prjctDOMHandler.createNewProject('test 3',document.querySelector('#Projects'))
+
+
+
+const localStrgeHandler = new localStorageHandler()
+localStrgeHandler.createProjectListArr()
+localStrgeHandler.loadProjects()
+
 prjctLogicHandler.addLogicToEditButtons()
 prjctLogicHandler.addLogicToEditDeleteButton()
-
+prjctLogicHandler.addLogicToProject()
+tskLogicHandler.addNewTaskButtonLogic()
+prjctLogicHandler.fixEditButtonBug()
 console.log('index.js working');
 
