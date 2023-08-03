@@ -32,6 +32,7 @@ html,body{
     padding-left: 10px;
     border-radius: 5px;
     opacity: 1;
+    margin-bottom: 15px;
 }
 
 
@@ -150,3 +151,8 @@ html,body{
     cursor: pointer;
 }
 
+#tasks{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

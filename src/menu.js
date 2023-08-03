@@ -1,6 +1,6 @@
 
 import { localStorageHandler } from "./localStorage";
-
+import { taskLogicHandler } from "./task";
 
 export class menuButtonDOMHandler{
     constructor(menuDropDown){
@@ -150,7 +150,6 @@ addLogicToEditButtons() {
 }
 
 fixEditButtonBug(){
-  console.log('jett')
   const projectEditButtonsContainer = document.querySelectorAll('.projectEditButtonsContainer');
   for(let i = 0; i<projectEditButtonsContainer.length;i++){
     projectEditButtonsContainer[i].style.opacity = '1'
@@ -169,7 +168,7 @@ addLogicToEditDeleteButton() {
   for (let i = 0; i < allEditDeleteButtons.length; i++) {
     const button = allEditDeleteButtons[i];
     button.addEventListener('click', () => {
-      console.log('her')
+
       const h = new localStorageHandler()  //giving deleteproject wrong index
       h.deleteProject(button)
       button.parentNode.parentNode.parentNode.remove();
@@ -184,8 +183,15 @@ addLogicToProject(){ //update projectlist
   const projectListText = document.querySelectorAll('.projectText')
   for(let i = 0; i < projectList.length;i++){
     projectList[i].addEventListener('click', () =>{
-      console.log('gwe')
       taskHeader.innerHTML = projectListText[i].textContent
+      localStorage.setItem('lastProjectIndexClickedOn',i)
+      const a = new taskLogicHandler()
+      const l = new localStorageHandler()
+      a.cleanUpTasks()
+      a.addNewTaskButton()
+      l.loadProjectsTasks(i)
+      a.addLogicToTaskButtons()
+      //delete tasks when clicking new project and add tak button
     })
 }
   
@@ -299,4 +305,10 @@ export class projectsDOMHandler {
   }
 }
 
-
+export class homeButtons{
+  allTasksButton(){
+    document.querySelector('#task-header').innerHTML = 'All Tasks'
+    document.querySelector('#addTaskContainer').remove()
+    //load all tasks
+  }
+} 

@@ -1,4 +1,5 @@
 import { projectsDOMHandler, projectLogicHandler } from "./menu";
+import { taskDOMHandler, taskLogicHandler } from "./task";
 
 
 export class localStorageHandler{
@@ -47,6 +48,7 @@ export class localStorageHandler{
 
         
     }
+
     deleteProject(btn){
         const a = localStorage.getItem('ProjectList')
         const newa = JSON.parse(a)
@@ -63,4 +65,38 @@ export class localStorageHandler{
         
     }
 
+    taskCreator(title,details,date,favorite,checked){
+        let task = {title: title, details: details,date:date,favorite:favorite,checked:checked}
+        return task
+    }
+
+    addTaskToProject(title, details, date, project, favorite, check) {
+        const projects = document.querySelectorAll('.projectHolder');
+        const a = localStorage.getItem('ProjectList');
+        const newa = JSON.parse(a);
+        
+        let newTask = this.taskCreator(title, details, date, favorite, check);
+        
+        for (let i = 0; i < projects.length; i++) {
+          if (i.toString() === project) {
+            newa[i].tasks.push(newTask);
+          }
+        }
+        
+        const updatedstring = JSON.stringify(newa);
+        localStorage.setItem('ProjectList', updatedstring);
+      }
+    loadProjectsTasks(lastProjectClickedOn){
+        const t = new taskDOMHandler()
+        const a = localStorage.getItem('ProjectList')
+        const newa = JSON.parse(a)
+        for(let i = 0; i<newa[lastProjectClickedOn].tasks.length;i++){
+            let currentTask = newa[lastProjectClickedOn].tasks[i]
+            console.log()
+            t.createDOMTask(currentTask.checked,currentTask.title,currentTask.details,currentTask.date,currentTask.favorite)
+        }
+        //console.log(newa[0].tasks)
+       //console.log(newa[0].tasks[0].title)
+    }
 }
+
