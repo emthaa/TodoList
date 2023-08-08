@@ -76,6 +76,7 @@ export class taskDOMHandler{
     }
 
     changeCheckBox(checkBox,isCheck,title,description){
+        
         if(isCheck == false){
         checkBox.style.border = '2px solid #71b771'
         checkBox.style.backgroundImage = "url('../imgs/checkmark.svg')"
@@ -238,7 +239,7 @@ export class taskLogicHandler{
             l.addTaskToProject(formTitleInput,detailsInput,dueDateInput,localStorage.getItem('lastProjectIndexClickedOn'),false,false)
             const a = new taskDOMHandler()
             a.createDOMTask(false,formTitleInput,detailsInput,dueDateInput,false)
-            this.addLogicToTaskButtons()
+            this.addLogicToTaskButtons(true)
             document.querySelector('#formContainer').remove()
         })
     }
@@ -248,65 +249,123 @@ export class taskLogicHandler{
 
     }
 
-    checkTaskLogic(){
+    checkTaskLogic(isProject){
         const checkBoxes = document.querySelectorAll('.checkBox')
         const taskTitles = document.querySelectorAll('.taskTitle')
         const taskDesc = document.querySelectorAll('.taskDescription')
         const j = localStorage.getItem('lastProjectIndexClickedOn')
         const tDOM = new taskDOMHandler()
-        const a = localStorage.getItem('ProjectList')
-        const newa = JSON.parse(a)
-
+        
+        if(isProject == true){
         for(let i = 0;i<checkBoxes.length;i++){
             checkBoxes[i].addEventListener('click' ,() =>{
+                const a = localStorage.getItem('ProjectList')
+                const newa = JSON.parse(a)
                 let isChecked = newa[j].tasks[i].checked
-               if(isChecked == false){
-
+                let task = newa[j].tasks[i]
                 tDOM.changeCheckBox(checkBoxes[i],isChecked,taskTitles[i],taskDesc[i])
 
-                newa[j].tasks[i].checked = true
+                newa[j].tasks[i].checked = !newa[j].tasks[i].checked
                 
                 const updatedstring = JSON.stringify(newa)
                 localStorage.setItem('ProjectList',updatedstring)
 
-               }else if(isChecked == true){
-                
-                tDOM.changeCheckBox(checkBoxes[i],isChecked,taskTitles[i],taskDesc[i])
-                
-                newa[j].tasks[i].checked = false
-                
-                const updatedstring = JSON.stringify(newa)
-                localStorage.setItem('ProjectList',updatedstring)
-               }
+
+               
             })
         }
+    }else if(isProject == false){
+        for (let i = 0; i < checkBoxes.length; i++) {
+            checkBoxes[i].addEventListener('click', () => {
+
+            const a = localStorage.getItem('ProjectList')
+            const newa = JSON.parse(a)
+
+            if (newa) {
+
+                newa.forEach((project, projectIndex) => {
+                    
+
+                    project.tasks.forEach((task, taskIndex) => {
+                        if(i == projectIndex+taskIndex){
+                            task.checked = !task.checked
+                            tDOM.changeCheckBox(checkBoxes[i], !task.checked,taskTitles[i],taskDesc[i])
+
+                            const updatedString = JSON.stringify(newa);
+                            localStorage.setItem('ProjectList', updatedString);
+                        }
+                    }
+            )}
+
+            )}
+            
+                
+
+              });
+        }
+    }
     }
 
-    favoriteTaskLogic() {
+    favoriteTaskLogic(isProject) {
+
         const favoriteStars = document.querySelectorAll('.taskFavorite');
-        const j = localStorage.getItem('lastProjectIndexClickedOn');
         const tDOM = new taskDOMHandler();
-        const a = localStorage.getItem('ProjectList');
-        const newa = JSON.parse(a);
-      
+
+        if(isProject == true){
+        const j = localStorage.getItem('lastProjectIndexClickedOn');
+        
+
         for (let i = 0; i < favoriteStars.length; i++) {
             favoriteStars[i].addEventListener('click', () => {
+                const a = localStorage.getItem('ProjectList');
+                const newa = JSON.parse(a);
                 const task = newa[j].tasks[i];
                 task.favorite = !task.favorite;
               
                 // Update the UI
                 tDOM.changeFavorite(favoriteStars[i], task.favorite);
-              
+                
                 // Update the task's favorite property in local storage
                 const updatedString = JSON.stringify(newa);
                 localStorage.setItem('ProjectList', updatedString);
               });
         }
+    }else if(isProject == false){
+        for (let i = 0; i < favoriteStars.length; i++) {
+            favoriteStars[i].addEventListener('click', () => {
+            let number = 0;
+            const a = localStorage.getItem('ProjectList')
+            const newa = JSON.parse(a)
+
+            if (newa) {
+
+                newa.forEach((project, projectIndex) => {
+                    
+
+                    project.tasks.forEach((task, taskIndex) => {
+                        if(i == projectIndex+taskIndex){
+                            task.favorite = !task.favorite
+                            tDOM.changeFavorite(favoriteStars[i], task.favorite)
+
+                            const updatedString = JSON.stringify(newa);
+                            localStorage.setItem('ProjectList', updatedString);
+                        }
+                    }
+            )}
+
+            )}
+            
+                
+
+              });
+        }
     }
 
-    addLogicToTaskButtons(){
-        this.checkTaskLogic()
-        this.favoriteTaskLogic()
+    }
+
+    addLogicToTaskButtons(isProject){
+        this.checkTaskLogic(isProject)
+        this.favoriteTaskLogic(isProject)
     }
 
 }

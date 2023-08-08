@@ -156,3 +156,18 @@ html,body{
     flex-direction: column;
     gap: 8px;
 }
+
+#Home > div{
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    
+}
+
+#Home > div > img{
+    height: 27px;
+    width: 27px;
+    margin-bottom: 4px;
+    margin-right: 5px;
+}

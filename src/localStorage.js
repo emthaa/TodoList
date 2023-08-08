@@ -7,14 +7,15 @@ export class localStorageHandler{
     constructor(){
 
     }
-    createProjectListArr = function() {
+    createProjectListArr() {
+        
         const h = localStorage.getItem('ProjectList');
-        if (typeof h === 'undefined') {
+        if (h === null) {
           const ProjectList = [];
           const arrayString = JSON.stringify(ProjectList);
           localStorage.setItem('ProjectList', arrayString);
         }
-        console.log(h)
+
       }
       
     
@@ -31,11 +32,12 @@ export class localStorageHandler{
 
         const c = localStorage.getItem('ProjectList')
         const newc = JSON.parse(c)
-        console.log(newc)
+        
     }
 
     loadProjects(){
         const a = localStorage.getItem('ProjectList')
+        if(a){
         const newa = JSON.parse(a)
 
         const b = new projectsDOMHandler()
@@ -45,6 +47,7 @@ export class localStorageHandler{
             b.createNewProject(obj.pName,document.querySelector('#Projects'))
             
         });
+    }
 
         
     }
@@ -92,11 +95,29 @@ export class localStorageHandler{
         const newa = JSON.parse(a)
         for(let i = 0; i<newa[lastProjectClickedOn].tasks.length;i++){
             let currentTask = newa[lastProjectClickedOn].tasks[i]
-            console.log()
             t.createDOMTask(currentTask.checked,currentTask.title,currentTask.details,currentTask.date,currentTask.favorite)
         }
+
+
+    
         //console.log(newa[0].tasks)
        //console.log(newa[0].tasks[0].title)
+    }
+    loadAllTasks(){
+        const a = localStorage.getItem('ProjectList')
+        const newa = JSON.parse(a)
+        const tasks = []
+        if (newa) {
+            // Loop through projects
+            for (const project of newa) {
+                
+                // Loop through tasks within each project
+                for (const task of project.tasks) {
+                    tasks.push(task)
+                }
+            }
+            return tasks
+        }
     }
 }
 

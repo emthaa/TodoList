@@ -11,14 +11,13 @@ import {homeButtons,  menuButtonDOMHandler, projectLogicHandler, projectsDOMHand
 import { localStorageHandler } from './localStorage';
 import { taskLogicHandler,taskDOMHandler } from './task';
 
-class TodoInfoHolder{
-    constructor(title,description,dueDate,priority){
-        this.title = title
-        this.description = description
-        this.dueDate = dueDate
-        this.priority = priority
-    }
-}
+
+
+
+const localStrgeHandler = new localStorageHandler()
+localStrgeHandler.createProjectListArr()
+
+
 const menubutton = document.querySelector('#menubutton');
 const menuDropDown = document.querySelector('#menuDropDown');
 const menuBtnDOMHandler = new menuButtonDOMHandler(menuDropDown);
@@ -60,19 +59,21 @@ document.addEventListener('click', function(event) {
 });
 
 
-
-
-const localStrgeHandler = new localStorageHandler()
-localStrgeHandler.createProjectListArr()
 localStrgeHandler.loadProjects()
+
+
 prjctLogicHandler.addLogicToEditButtons()
 
 
 prjctLogicHandler.addLogicToEditDeleteButton()
 prjctLogicHandler.addLogicToProject()
+homeBtns.addLogicToAllHomeButtons(true,true,true,true)
 homeBtns.allTasksButton()
+
 tskLogicHandler.addNewTaskButtonLogic()
+
 prjctLogicHandler.fixEditButtonBug()
+
 
 console.log('index.js working');
 

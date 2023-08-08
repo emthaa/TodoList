@@ -1,6 +1,6 @@
 
 import { localStorageHandler } from "./localStorage";
-import { taskLogicHandler } from "./task";
+import { taskLogicHandler, taskDOMHandler} from "./task";
 
 export class menuButtonDOMHandler{
     constructor(menuDropDown){
@@ -190,7 +190,7 @@ addLogicToProject(){ //update projectlist
       a.cleanUpTasks()
       a.addNewTaskButton()
       l.loadProjectsTasks(i)
-      a.addLogicToTaskButtons()
+      a.addLogicToTaskButtons(true)
       //delete tasks when clicking new project and add tak button
     })
 }
@@ -306,9 +306,37 @@ export class projectsDOMHandler {
 }
 
 export class homeButtons{
+  addLogicToAllHomeButtons(wantAllTasks,wantToday,wantWeek,wantImportant){
+    const k = new taskLogicHandler
+    if(wantAllTasks == true){
+      document.querySelector('#allTasks').addEventListener('click', () =>{
+        k.cleanUpTasks()
+        this.allTasksButton()
+      })
+    }
+    if(wantToday == true){
+      document.querySelector('#Today').addEventListener('click', () =>{
+        
+      })
+    }
+    if(wantWeek == true){
+
+    }
+    if(wantImportant == true){
+
+    }
+  }
   allTasksButton(){
+    const c = new localStorageHandler()
+    const loadedTasks = c.loadAllTasks()
+    const a = new taskDOMHandler
+    const b = new taskLogicHandler
+    console.log(loadedTasks)
+    loadedTasks.forEach((task) => a.createDOMTask(task.checked,task.title,task.details,task.date,task.favorite))
+    b.addLogicToTaskButtons(false)
     document.querySelector('#task-header').innerHTML = 'All Tasks'
     document.querySelector('#addTaskContainer').remove()
+    
     //load all tasks
   }
 } 
