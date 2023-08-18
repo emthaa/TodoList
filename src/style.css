@@ -115,7 +115,12 @@
     background-color: #1e281f;
 }
 
-.renameButton,.deleteButton{
+
+.taskRenameButton:hover,.taskDeleteButton:hover{
+    background-color: rgb(44, 52, 49);
+}
+
+.renameButton,.deleteButton,.taskRenameButton,.taskDeleteButton{
     height: 45px;
     width: 100%;
     border: none;
@@ -124,6 +129,23 @@
     font-weight: bold;
     background-color: #1f2e23;
     cursor: pointer;
+}
+
+
+
+
+.taskEditsButtonHolder{
+    position: relative;
+    height: 90px;
+    width: 90px;
+    background-color: aliceblue;
+    border: 1px dotted black;
+    z-index: 2;
+    padding: 5px;
+    background-color: #1f2e23;
+    right: 75px;
+    top: -105px;
+    margin-right: 200px;
 }
 
 
@@ -271,3 +293,4 @@
 .taskContainerTopLeft{
     display: flex;
 }
+

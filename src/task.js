@@ -101,9 +101,64 @@ export class taskDOMHandler{
         }
     }
     
-    createDOMTask(checked,titlee,desc,datee,favoriteChecked){
+    createDOMTask(checked,titlee,desc,datee,favoriteChecked,bland){
+        if(bland == true){
+            const putTaskHere = document.querySelector('#tasks')
 
-        const putTaskHere = document.querySelector('#tasks')
+            const taskContainer = document.createElement('div')
+            
+            const taskContainerTop = document.createElement('div')
+            const checkBox = document.createElement('div')
+            const title = document.createElement('div')
+            const date = document.createElement('div')
+            const taskButtons = document.createElement('div')
+            const favorite = document.createElement('div')
+            const edit = document.createElement('div')
+            const taskContainerTopLeft = document.createElement('div')
+            const taskContainerTopRight = document.createElement('div')
+    
+    
+            const taskContainerBottom = document.createElement('div')
+            const description = document.createElement('div')
+    
+            putTaskHere.appendChild(taskContainer)
+    
+            taskContainer.appendChild(taskContainerTop)
+            taskContainer.appendChild(taskContainerBottom)
+            taskContainerTop.appendChild(taskContainerTopLeft)
+            taskContainerTop.appendChild(taskContainerTopRight)
+            taskContainerTopLeft.appendChild(title)
+            taskContainerTopRight.appendChild(date)
+
+    
+            taskContainerBottom.appendChild(description)
+    
+            taskContainer.className = 'taskContainer'
+            checkBox.className = 'checkBox'
+            title.className = 'taskTitle'
+            date.className = 'taskDate'
+            favorite.className = 'taskFavorite'
+            edit.className = 'taskEdit'
+            taskContainerBottom.className = 'taskContainerBottom'
+            description.className = 'taskDescription'
+            taskContainerTop.className = 'taskContainerTop'
+            taskButtons.className = 'taskButtons'
+            taskContainerTopRight.className = 'taskContainerTopRight'
+            taskContainerTopLeft.className = 'taskContainerTopLeft'
+            title.innerHTML = titlee
+            description.innerHTML = desc
+            if (datee == ""){
+                date.innerHTML = 'No Due Date'
+            }else{
+                date.innerHTML = datee
+            }
+            
+            date.style.marginRight = '15px'
+            description.style.marginLeft = '10px'
+            
+            
+        }else{
+            const putTaskHere = document.querySelector('#tasks')
 
         const taskContainer = document.createElement('div')
         
@@ -172,9 +227,30 @@ export class taskDOMHandler{
         }else{
             favorite.style.backgroundImage = "url('../imgs/star.png')"
         }
+        }
+
+        
     }
 
+    taskEditDOM(editButton){
+        const taskRenameButton = document.createElement('button')
+        const taskDeleteButton = document.createElement('button')
+        const taskEditsButtonHolder = document.createElement('div')
 
+        taskEditsButtonHolder.className = 'taskEditsButtonHolder'
+        taskRenameButton.className = 'taskRenameButton'
+        taskDeleteButton.className = 'taskDeleteButton'
+
+        taskEditsButtonHolder.appendChild(taskRenameButton)
+        taskEditsButtonHolder.appendChild(taskDeleteButton)
+        taskRenameButton.innerHTML = 'Edit'
+        taskDeleteButton.innerHTML = 'Delete'
+        editButton.appendChild(taskEditsButtonHolder)
+
+
+
+
+    }
 }
 
 export class taskLogicHandler{
@@ -366,6 +442,52 @@ export class taskLogicHandler{
     addLogicToTaskButtons(isProject){
         this.checkTaskLogic(isProject)
         this.favoriteTaskLogic(isProject)
+        this.addLogicToTaskEditBtns()
     }
+    taskDeleteButton(){
+        const lastProjectIndexClickedOn = localStorage.getItem('lastProjectIndexClickedOn')
+        const lastTaskIndexClickedOn = localStorage.getItem('lastTaskIndexClickedOn')
+        const allTasksOnScreen = document.querySelectorAll('.taskContainer')
+        const h = new localStorageHandler()
+        h.deleteTask(lastProjectIndexClickedOn,lastTaskIndexClickedOn)
+        allTasksOnScreen[lastTaskIndexClickedOn].remove()
+
+        
+    }
+    
+addLogicToTaskEditBtns() {
+    const taskEditsButtons = document.querySelectorAll('.taskEdit');
+
+    const removeEditsButtonHolder = () => {
+        const existingEditsButtonHolders = document.querySelectorAll('.taskEditsButtonHolder');
+        existingEditsButtonHolders.forEach(holder => holder.remove());
+    };
+
+    for (let i = 0; i < taskEditsButtons.length; i++) {
+        taskEditsButtons[i].addEventListener('click', (event) => {
+            // Remove any existing taskEditsButtonHolders
+            removeEditsButtonHolder();
+
+            const a = new taskDOMHandler();
+            if (taskEditsButtons[i].firstChild == null) {
+                a.taskEditDOM(taskEditsButtons[i]);
+                localStorage.setItem('lastTaskIndexClickedOn', i);
+               document.querySelector('.taskDeleteButton').addEventListener('click',() =>{
+                this.taskDeleteButton()
+               })
+
+                document.addEventListener('click', (event) => {
+                    if (!event.target.closest('.taskEdit')) {
+                        removeEditsButtonHolder();
+                    }
+                });
+            }
+
+            // Prevent the event from bubbling up and triggering the document listener immediately
+            event.stopPropagation();
+        });
+    }
+}
+
 
 }

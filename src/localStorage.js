@@ -1,4 +1,4 @@
-import { projectsDOMHandler, projectLogicHandler } from "./menu";
+import { projectsDOMHandler, projectLogicHandler ,homeButtons} from "./menu";
 import { taskDOMHandler, taskLogicHandler } from "./task";
 
 
@@ -93,10 +93,14 @@ export class localStorageHandler{
         const t = new taskDOMHandler()
         const a = localStorage.getItem('ProjectList')
         const newa = JSON.parse(a)
+
+
+        if(newa != ''){
         for(let i = 0; i<newa[lastProjectClickedOn].tasks.length;i++){
             let currentTask = newa[lastProjectClickedOn].tasks[i]
             t.createDOMTask(currentTask.checked,currentTask.title,currentTask.details,currentTask.date,currentTask.favorite)
         }
+    }
 
 
     
@@ -118,6 +122,15 @@ export class localStorageHandler{
             }
             return tasks
         }
+    }
+    deleteTask(projectIndex,taskIndex){
+        const a = localStorage.getItem('ProjectList')
+        const newa = JSON.parse(a)
+
+        newa[projectIndex].tasks.splice(taskIndex,1)
+
+        const updatedstring = JSON.stringify(newa);
+        localStorage.setItem('ProjectList', updatedstring);
     }
 }
 

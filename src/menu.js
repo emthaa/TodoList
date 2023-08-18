@@ -106,6 +106,7 @@ addLogicToEditButtons() {
   allEditButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
       event.stopPropagation();
+      
       const a = new projectsDOMHandler();
       const container = button.querySelector('.projectEditButtonsContainer');
 
@@ -165,14 +166,20 @@ fixEditButtonBug(){
 
 addLogicToEditDeleteButton() {
   const allEditDeleteButtons = document.querySelectorAll('.deleteButton');
+  
   for (let i = 0; i < allEditDeleteButtons.length; i++) {
     const button = allEditDeleteButtons[i];
     button.addEventListener('click', () => {
+      const h = new localStorageHandler();  
+      h.deleteProject(button);
+      
+      
 
-      const h = new localStorageHandler()  //giving deleteproject wrong index
-      h.deleteProject(button)
+      // Remove the project and update the project list
       button.parentNode.parentNode.parentNode.remove();
-      this.addLogicToProject()
+      
+      this.addLogicToProject(); // Re-add logic to the remaining project elements
+
     });
   }
 }
@@ -181,6 +188,8 @@ addLogicToProject(){ //update projectlist
   const taskHeader = document.querySelector('#task-header');
   const projectList = document.querySelectorAll('.projectHolder')
   const projectListText = document.querySelectorAll('.projectText')
+  const projectEditButtons = document.querySelectorAll('.projectEditButton'
+  )
   for(let i = 0; i < projectList.length;i++){
     projectList[i].addEventListener('click', () =>{
       taskHeader.innerHTML = projectListText[i].textContent
@@ -191,7 +200,18 @@ addLogicToProject(){ //update projectlist
       a.addNewTaskButton()
       l.loadProjectsTasks(i)
       a.addLogicToTaskButtons(true)
-      //delete tasks when clicking new project and add tak button
+
+    })
+    projectEditButtons[i].addEventListener('click', () =>{
+      taskHeader.innerHTML = projectListText[i].textContent
+      localStorage.setItem('lastProjectIndexClickedOn',i)
+      const a = new taskLogicHandler()
+      const l = new localStorageHandler()
+      a.cleanUpTasks()
+      a.addNewTaskButton()
+      l.loadProjectsTasks(i)
+      a.addLogicToTaskButtons(true)
+
     })
 }
   
@@ -316,14 +336,21 @@ export class homeButtons{
     }
     if(wantToday == true){
       document.querySelector('#Today').addEventListener('click', () =>{
-        
+        k.cleanUpTasks()
+        this.todayButton()
       })
     }
     if(wantWeek == true){
-
+      document.querySelector('#sevendays').addEventListener('click', () =>{
+        k.cleanUpTasks()
+        this.weeklyButton()
+      })
     }
     if(wantImportant == true){
-
+      document.querySelector('#Important').addEventListener('click' ,() =>{
+        k.cleanUpTasks()
+        this.favoriteButton()
+      })
     }
   }
   allTasksButton(){
@@ -332,11 +359,104 @@ export class homeButtons{
     const a = new taskDOMHandler
     const b = new taskLogicHandler
     console.log(loadedTasks)
-    loadedTasks.forEach((task) => a.createDOMTask(task.checked,task.title,task.details,task.date,task.favorite))
+    loadedTasks.forEach((task) => a.createDOMTask(task.checked,task.title,task.details,task.date,task.favorite,true))
     b.addLogicToTaskButtons(false)
     document.querySelector('#task-header').innerHTML = 'All Tasks'
     document.querySelector('#addTaskContainer').remove()
     
-    //load all tasks
+    
   }
+  todayButton(){
+    const k = new taskLogicHandler
+    k.cleanUpTasks()
+    
+      document.querySelector('#task-header').innerHTML = 'Today'
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+
+    const b = new taskLogicHandler
+    const h = new taskDOMHandler
+    
+    const a = localStorage.getItem('ProjectList')
+    const newa = JSON.parse(a)
+
+    if (newa) {
+      // Loop through projects
+      for (const project of newa) {
+          
+          // Loop through tasks within each project
+          for (const task of project.tasks) {
+              if(today == task.date){
+                h.createDOMTask(task.checked,task.title,task.details,task.date,task.favorite,true)
+              }
+          }
+      }
+
+  }
+
+  document.querySelector('#task-header').innerHTML = 'Today'
+  b.addLogicToTaskButtons(false)
+
+    console.log(document.querySelector('#task-header').innerHTML)
+  }
+
+  weeklyButton(){
+    const currentDate = new Date();
+    const next7Days = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
+    const b = new taskLogicHandler
+    const h = new taskDOMHandler
+    
+    const a = localStorage.getItem('ProjectList')
+    const newa = JSON.parse(a)
+
+    if (newa) {
+      // Loop through projects
+      for (const project of newa) {
+          
+          // Loop through tasks within each project
+          for (const task of project.tasks) {
+            let inputDate = new Date(task.date);
+              if(inputDate >= currentDate && inputDate <= next7Days){
+                h.createDOMTask(task.checked,task.title,task.details,task.date,task.favorite,true)
+              }
+          }
+      }
+
+  }
+  b.addLogicToTaskButtons(false)
+  document.querySelector('#task-header').innerHTML = 'Next 7 Days'
+
+ 
+    
+  }
+  favoriteButton(){
+    const b = new taskLogicHandler
+    const h = new taskDOMHandler
+    
+    const a = localStorage.getItem('ProjectList')
+    const newa = JSON.parse(a)
+
+    if (newa) {
+      // Loop through projects
+      for (const project of newa) {
+          
+          // Loop through tasks within each project
+          for (const task of project.tasks) {
+              if(task.favorite == true){
+                h.createDOMTask(task.checked,task.title,task.details,task.date,task.favorite,true)
+              }
+          }
+      }
+
+  }
+  b.addLogicToTaskButtons(false)
+  document.querySelector('#task-header').innerHTML = 'Important'
+
+ 
+  }
+  
 } 

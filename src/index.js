@@ -1,7 +1,13 @@
 /**
  Todo:
   move projects up and down
-  DOM function to create task 
+  rename projects
+  deleting tasks and renaming tasks
+
+
+  Bugs:
+  checking and favoriting tasks under home tab dont work
+
  */
 
 
@@ -59,12 +65,14 @@ document.addEventListener('click', function(event) {
 });
 
 
+
 localStrgeHandler.loadProjects()
 
 
 prjctLogicHandler.addLogicToEditButtons()
 
 
+prjctLogicHandler.fixEditButtonBug()
 prjctLogicHandler.addLogicToEditDeleteButton()
 prjctLogicHandler.addLogicToProject()
 homeBtns.addLogicToAllHomeButtons(true,true,true,true)
@@ -72,7 +80,7 @@ homeBtns.allTasksButton()
 
 tskLogicHandler.addNewTaskButtonLogic()
 
-prjctLogicHandler.fixEditButtonBug()
+
 
 
 console.log('index.js working');
