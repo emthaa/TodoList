@@ -52,6 +52,8 @@ export class projectLogicHandler {
     const a = new projectsDOMHandler(puttingProjectHere);
     this.addLogicToEditButtons();
     this.addLogicToEditDeleteButton();
+    this.addLogicToPrjctEditButton();
+    
   }
 
   addLogicToAddButton() {
@@ -63,6 +65,8 @@ export class projectLogicHandler {
         this.addButtonFunction();
         this.addLogicToEditButtons()
         this.addLogicToEditDeleteButton()
+        
+        this.addLogicToPrjctEditButton()
       },
       false
     );
@@ -72,6 +76,7 @@ export class projectLogicHandler {
         this.addButtonFunction();
         this.addLogicToEditButtons()
         this.addLogicToEditDeleteButton()
+        this.addLogicToPrjctEditButton()
       }
     });
   }
@@ -93,7 +98,8 @@ addNewProjectButton() {
     this.addLogicToAddButton();
     this.addLogicToCancelButton();
     this.addLogicToEditButtons(); 
-    this.addLogicToEditDeleteButton(); 
+    this.addLogicToEditDeleteButton(); //<------ REMEMBER THIS
+    
     
   }
 }
@@ -121,6 +127,7 @@ addLogicToEditButtons() {
 
         a.projectEditButtonFunction(button);
         openContainer = container;
+
       } else {
       
         container.style.opacity = '0';
@@ -213,9 +220,81 @@ addLogicToProject(){ //update projectlist
       a.addLogicToTaskButtons(true)
 
     })
+
 }
+
+
   
 
+}
+
+clearProjects(){
+  const projectHolders = document.querySelectorAll('.projectHolder')
+  for(let i = 0;i<projectHolders.length; i++){
+    projectHolders[i].remove()
+  }
+}
+
+addLogicToPrjctEditCancel(){
+  const a = document.querySelector('#projectEditHolderCancelButton')
+  a.addEventListener('click' ,() =>{
+    this.clearProjects() //add logic
+    const h = new localStorageHandler()
+    h.loadProjects()
+    this.addLogicToProject()
+    this.addLogicToEditButtons()
+    this.addLogicToEditDeleteButton()
+    this.addLogicToPrjctEditButton()
+    
+  })
+
+}
+
+addLogicToPrjctEditAdd(){
+  const button = document.querySelector('.projectEditAddButton')
+  const newProjectValue = document.querySelector('#projectEditHolderInput')
+  button.addEventListener('click',()=>{
+    event.preventDefault();
+    const h = new localStorageHandler()
+    h.changeProject(localStorage.getItem('lastProjectIndexClickedOn'),newProjectValue.value )
+
+    this.clearProjects()
+    h.loadProjects()
+    this.addLogicToEditButtons()
+    this.fixEditButtonBug()
+    this.addLogicToEditDeleteButton()
+    this.addLogicToProject()
+    this.addLogicToPrjctEditButton()
+
+    //get value
+    // change project name in storage
+    //refresh project
+  })
+}
+
+
+
+addLogicToPrjctEditButton(){
+  const allRenameButtons = document.querySelectorAll('.renameButton')
+  const projects = document.querySelectorAll('.projectHolder')
+  for(let i = 0; i< allRenameButtons.length; i++){
+    allRenameButtons[i].addEventListener('click',()=>{
+      const l = new projectsDOMHandler(projects[i]) 
+      while (projects[i].firstChild) {
+        projects[i].removeChild(projects[i].firstChild); 
+    }  
+
+      l.getProjectPrerequisites(true)  //remove everything in each project
+      projects[i].style.height = '125px' //cant have two edits at the same time
+      projects[i].style.paddingRight = '25px'
+      document.querySelector('#projectEditHolder').style.width = '100%'
+
+// different add and cancel buttons
+this.addLogicToPrjctEditAdd()
+      this.addLogicToPrjctEditCancel()   
+//<----- project edit prerequsite here
+    })
+}
 }
 
 }
@@ -224,7 +303,7 @@ export class projectsDOMHandler {
     this.whereToPutProject = whereToPutProject;
   }
 
-  getProjectPrerequisites() {
+  getProjectPrerequisites(editProject) {
     const projectCreatorHolder = document.createElement('form');
     this.whereToPutProject.appendChild(projectCreatorHolder);
     projectCreatorHolder.id = 'projectCreatorHolder';
@@ -261,7 +340,14 @@ export class projectsDOMHandler {
     projectCreatorHolderCancelButton.id = 'projectCreatorHolderCancelButton'
   
 
-
+    //seperate project form HERE <------------
+      if(editProject == true){
+        projectCreatorHolder.id = 'projectEditHolder';
+        projectCreatorHolderInput.id = 'projectEditHolderInput';
+        projectCreatorHolderAddButton.className = 'projectEditAddButton';
+        projectCreatorHolderCancelButton.id = 'projectEditHolderCancelButton';
+    
+    }
 
   }
 
@@ -299,6 +385,7 @@ export class projectsDOMHandler {
 
 
   }
+
 
 
   moveAddProjectButtonDown() {

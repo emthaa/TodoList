@@ -75,6 +75,7 @@ prjctLogicHandler.addLogicToEditButtons()
 prjctLogicHandler.fixEditButtonBug()
 prjctLogicHandler.addLogicToEditDeleteButton()
 prjctLogicHandler.addLogicToProject()
+prjctLogicHandler.addLogicToPrjctEditButton()
 homeBtns.addLogicToAllHomeButtons(true,true,true,true)
 homeBtns.allTasksButton()
 

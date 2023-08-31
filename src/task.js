@@ -20,8 +20,9 @@ export class taskDOMHandler{
         
 
     }
-    newTaskPrerequisite(){
-        const putTaskPrerequisiteHere = document.querySelector('#task-prerequisite')
+    newTaskPrerequisite(putTaskPreHere,editForm){
+        
+        const putTaskPrerequisiteHere = putTaskPreHere
         const formContainer = document.createElement('form')
         const formTitle = document.createElement('div')
         const formTitleInput = document.createElement('input')
@@ -38,7 +39,7 @@ export class taskDOMHandler{
         detailsTitle.innerHTML = 'Details(optional):'
         dateTitle.innerHTML = 'Date:'
         addButton.type = 'submit'
-        addButton.value = 'Add'
+        
         cancelButton.innerHTML = 'Cancel'
         dateInput.type = 'date'
 
@@ -57,7 +58,8 @@ export class taskDOMHandler{
         buttonHolder.appendChild(cancelButton)
 
         
-        formContainer.id = 'formContainer'
+
+
         formTitle.id = 'formTitle'
         formTitleInput.id = 'formTitleInput'
         detailsTitle.id = 'detailsTitle'
@@ -69,7 +71,21 @@ export class taskDOMHandler{
         cancelButton.id = 'taskCancel'
         buttonHolder.id = 'newTaskButtonHolder'
         
+        if(editForm == true){
+            addButton.value = 'Change'
+            formContainer.id = 'editTaskContainer'
+            addButton.className = 'taskEditAddButton'
+            cancelButton.className = 'taskEditCancelButton'
+            formTitleInput.id = 'formEditTitleInput'
+            detailsInput.id = 'detailsEditInput'
+            dateInput.id = 'dateEditInput'
 
+
+        }else if(editForm == false){
+            addButton.value = 'Add'
+            formContainer.id = 'formContainer'
+        
+        }
 
 
 
@@ -286,7 +302,7 @@ export class taskLogicHandler{
             
             if(document.querySelector('#formContainer') === null){
                 const a = new taskDOMHandler()
-                a.newTaskPrerequisite()
+                a.newTaskPrerequisite(document.querySelector('#task-prerequisite'),false)
                 this.newTaskPrerequisiteSubmit()
                 this.addLogicToTaskCancelBtn()
             }
@@ -451,8 +467,70 @@ export class taskLogicHandler{
         const h = new localStorageHandler()
         h.deleteTask(lastProjectIndexClickedOn,lastTaskIndexClickedOn)
         allTasksOnScreen[lastTaskIndexClickedOn].remove()
-
+        this.addLogicToTaskButtons(true)
         
+    }
+    addLogicToTaskEditCancelBtn(){
+
+        document.querySelector('.taskEditCancelButton').addEventListener('click', () =>{
+            const a = new taskLogicHandler()
+            const l = new localStorageHandler()  //refreshes tasks
+            a.cleanUpTasks()
+            a.addNewTaskButton()
+            l.loadProjectsTasks(localStorage.getItem('lastProjectIndexClickedOn'))
+            a.addLogicToTaskButtons(true)
+        })
+    }
+    addLogicToTaskEditAddBtn(){
+        const taskEditAddButton = document.querySelector('.taskEditAddButton')
+        const lastProjectIndexClickedOn = localStorage.getItem('lastProjectIndexClickedOn')
+        const lastTaskIndexClickedOn = localStorage.getItem('lastTaskIndexClickedOn')
+        taskEditAddButton.addEventListener('click', ()=>{ 
+            
+            const formTitle = document.querySelector('#formEditTitleInput')
+            const formDetails = document.querySelector('#detailsEditInput')
+            const formDate = document.querySelector('#dateEditInput')
+            event.preventDefault();
+            const h = new localStorageHandler()
+            h.changeTask(lastProjectIndexClickedOn,lastTaskIndexClickedOn ,formTitle.value,formDetails.value,formDate.value)
+
+            const a = new taskLogicHandler()
+            const l = new localStorageHandler()  //refreshes tasks
+            a.cleanUpTasks()
+            a.addNewTaskButton()
+            l.loadProjectsTasks(localStorage.getItem('lastProjectIndexClickedOn'))
+            a.addLogicToTaskButtons(true)
+        
+        });
+    }
+    taskEditButton(){
+        if(document.querySelector('#editTaskContainer')){
+            const a = new taskLogicHandler()
+            const l = new localStorageHandler()
+            a.cleanUpTasks()
+            a.addNewTaskButton()
+            l.loadProjectsTasks(localStorage.getItem('lastProjectIndexClickedOn'))
+            a.addLogicToTaskButtons(true)
+        }
+        const lastProjectIndexClickedOn = localStorage.getItem('lastProjectIndexClickedOn')
+        const lastTaskIndexClickedOn = localStorage.getItem('lastTaskIndexClickedOn')
+        const allTasksOnScreen = document.querySelectorAll('.taskContainer')
+        const parentt = allTasksOnScreen[lastTaskIndexClickedOn]
+        const tDOMHandler = new taskDOMHandler()
+        while (parentt.firstChild) {
+            parentt.removeChild(parentt.firstChild); 
+        }
+        tDOMHandler.newTaskPrerequisite(parentt,true)
+        
+        const a = new taskDOMHandler()
+
+        this.addLogicToTaskEditAddBtn()
+        this.addLogicToTaskEditCancelBtn() 
+        
+        parentt.style.height = '100%'
+
+
+
     }
     
 addLogicToTaskEditBtns() {
@@ -463,6 +541,8 @@ addLogicToTaskEditBtns() {
         existingEditsButtonHolders.forEach(holder => holder.remove());
     };
 
+
+
     for (let i = 0; i < taskEditsButtons.length; i++) {
         taskEditsButtons[i].addEventListener('click', (event) => {
             // Remove any existing taskEditsButtonHolders
@@ -472,10 +552,13 @@ addLogicToTaskEditBtns() {
             if (taskEditsButtons[i].firstChild == null) {
                 a.taskEditDOM(taskEditsButtons[i]);
                 localStorage.setItem('lastTaskIndexClickedOn', i);
+
                document.querySelector('.taskDeleteButton').addEventListener('click',() =>{
                 this.taskDeleteButton()
                })
-
+               document.querySelector('.taskRenameButton').addEventListener('click', () =>{
+                this.taskEditButton()
+               })
                 document.addEventListener('click', (event) => {
                     if (!event.target.closest('.taskEdit')) {
                         removeEditsButtonHolder();

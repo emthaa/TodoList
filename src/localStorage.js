@@ -132,5 +132,31 @@ export class localStorageHandler{
         const updatedstring = JSON.stringify(newa);
         localStorage.setItem('ProjectList', updatedstring);
     }
+    changeTask(projectIndex,taskIndex,title,desc,date){
+        const a = localStorage.getItem('ProjectList')
+        const newa = JSON.parse(a)
+        
+        const task = newa[projectIndex].tasks[taskIndex]
+
+        task.title = title
+        task.details = desc
+        task.date = date
+        
+
+        const updatedstring = JSON.stringify(newa);
+        localStorage.setItem('ProjectList', updatedstring);
+        // 
+    }
+    changeProject(projectIndex,newProjectName){
+        const a = localStorage.getItem('ProjectList');
+        const newa = JSON.parse(a);
+        
+        const selectedProject = newa[projectIndex];
+        selectedProject.pName = newProjectName;
+        
+
+        const updatedstring = JSON.stringify(newa);
+        localStorage.setItem('ProjectList', updatedstring);
+    }
 }
 
