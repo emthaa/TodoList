@@ -82,7 +82,3 @@ homeBtns.allTasksButton()
 tskLogicHandler.addNewTaskButtonLogic()
 
 
-
-
-console.log('index.js working');
-

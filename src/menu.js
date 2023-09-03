@@ -186,7 +186,11 @@ addLogicToEditDeleteButton() {
       button.parentNode.parentNode.parentNode.remove();
       
       this.addLogicToProject(); // Re-add logic to the remaining project elements
-
+      const t = new taskLogicHandler()
+      t.cleanUpTasks()
+      const b = new homeButtons()
+      b.allTasksButton()
+      
     });
   }
 }
@@ -261,40 +265,58 @@ addLogicToPrjctEditAdd(){
     this.clearProjects()
     h.loadProjects()
     this.addLogicToEditButtons()
-    this.fixEditButtonBug()
+    this.fixEditButtonBug()                     
     this.addLogicToEditDeleteButton()
     this.addLogicToProject()
     this.addLogicToPrjctEditButton()
 
-    //get value
-    // change project name in storage
-    //refresh project
+
   })
 }
 
 
 
 addLogicToPrjctEditButton(){
-  const allRenameButtons = document.querySelectorAll('.renameButton')
-  const projects = document.querySelectorAll('.projectHolder')
-  for(let i = 0; i< allRenameButtons.length; i++){
-    allRenameButtons[i].addEventListener('click',()=>{
-      const l = new projectsDOMHandler(projects[i]) 
-      while (projects[i].firstChild) {
-        projects[i].removeChild(projects[i].firstChild); 
-    }  
+  
+  
 
-      l.getProjectPrerequisites(true)  //remove everything in each project
-      projects[i].style.height = '125px' //cant have two edits at the same time
-      projects[i].style.paddingRight = '25px'
-      document.querySelector('#projectEditHolder').style.width = '100%'
+    const allRenameButtons = document.querySelectorAll('.renameButton')
 
-// different add and cancel buttons
-this.addLogicToPrjctEditAdd()
-      this.addLogicToPrjctEditCancel()   
-//<----- project edit prerequsite here
-    })
-}
+    for(let i = 0; i< allRenameButtons.length; i++){
+      allRenameButtons[i].addEventListener('click',()=>{
+
+
+          const h = new localStorageHandler()
+          this.clearProjects()
+          h.loadProjects()
+          this.addLogicToEditButtons()
+          this.fixEditButtonBug()                     
+          this.addLogicToEditDeleteButton()
+          this.addLogicToProject()
+          this.addLogicToPrjctEditButton()
+          const projects = document.querySelectorAll('.projectHolder')
+        const l = new projectsDOMHandler(projects[i]) //projects get turned into null
+        while (projects[i].firstChild) {
+          projects[i].removeChild(projects[i].firstChild); 
+      }  
+      
+        l.getProjectPrerequisites(true)  
+        projects[i].style.height = '125px' //cant have two edits at the same time
+        projects[i].style.paddingRight = '25px'
+        document.querySelector('#projectEditHolder').style.width = '100%'
+  
+  // different add and cancel buttons
+  this.addLogicToPrjctEditAdd()
+        this.addLogicToPrjctEditCancel()   
+  //<----- project edit prerequsite here
+      })
+  
+
+
+  }
+  
+
+
 }
 
 }
@@ -445,11 +467,14 @@ export class homeButtons{
     const loadedTasks = c.loadAllTasks()
     const a = new taskDOMHandler
     const b = new taskLogicHandler
-    console.log(loadedTasks)
+
     loadedTasks.forEach((task) => a.createDOMTask(task.checked,task.title,task.details,task.date,task.favorite,true))
     b.addLogicToTaskButtons(false)
     document.querySelector('#task-header').innerHTML = 'All Tasks'
-    document.querySelector('#addTaskContainer').remove()
+    if(document.querySelector('#addTaskContainer')){
+      document.querySelector('#addTaskContainer').remove()
+    }
+    
     
     
   }
@@ -488,7 +513,7 @@ export class homeButtons{
   document.querySelector('#task-header').innerHTML = 'Today'
   b.addLogicToTaskButtons(false)
 
-    console.log(document.querySelector('#task-header').innerHTML)
+
   }
 
   weeklyButton(){
